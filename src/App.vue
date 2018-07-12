@@ -15,6 +15,13 @@
                                 v-model="userData.origin"
                                 @input = "inputListen('origin')"
                                 >
+                                <div class="suggestions" style="border: 1px solid red">
+                                    <ul>
+                                        <li><b>Sto</b>rd  Airport, <b>Sto</b>rd, Norway</li>
+                                        <li>Airport</li>
+                                        <li>Airport</li>
+                                    </ul>
+                                </div>
                     </div>
                     <div class="form-group">
                         <label for="destination">To</label>
@@ -31,7 +38,7 @@
             
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 from-group">
-                    <label for="priority">Priority</label>
+                    <label for="priority">Calendar</label>
                     <select
                             id="priority"
                             class="form-control"
@@ -71,6 +78,12 @@
                         <p>Origin: {{userData.origin}}</p>
                         <p>Destination: {{userData.destination}}</p>
                         <p>User Input: {{userData.input}}</p>
+
+                        <hr>
+                        <p>Airports: </p>
+                        <ul>
+                            <li v-for="airport in airports"><span>{{airport.target.code}}</span> - <span v-html="airport.highlight">{{airport.highlight}}</span></li>
+                        </ul>
             
                     </div>
                 </div>
@@ -90,6 +103,7 @@ import axios from 'axios'
                     input: ""
                 },
                 airports: [],
+                IATA: []
             }
         },
             methods: {
@@ -97,10 +111,7 @@ import axios from 'axios'
                     this.isSubmitted = true;
                 },
                 inputListen(location) {
-                    this.userData[location].length >= 3 ? this.getAirports(location) : console.log("Filled in " + this.userData[location].length);
-                },
-                destinationListen() {
-                    // this.userData.destination.length >= 3 ? alert("destination equal 3") : console.log("Filled in " + this.userData.destination.length);
+                    this.userData[location].length >= 3 ? this.getAirports(location) : console.log("Filled in " + location + " " + this.userData[location].length);
                 },
 
                 getAirports(input) {
@@ -108,7 +119,24 @@ import axios from 'axios'
                     axios({
                         url: "https://www.us.despegar.com/suggestions?grouped=true&locale=en_US&profile=sbox-flights&hint="+this.userData.input,
                         method: "GET",                                            
-                    }).then(data => console.log(data));
+                    }).then( //IATA - City - Country
+                        (resp) => {
+                            let response = resp.data.items;
+                            console.log(response);
+                            let airports = response[0].items;
+                            let cities = response[1].items
+                            console.log("Airports: ");
+                            console.log(airports);
+                            console.log("==================");
+                            console.log("Cities: ")
+                            console.log(cities);
+                            // data.forEach()
+
+                            airports.forEach((airport) => {
+                                
+                                this.airports.push(airport);
+                            });
+                        });
                 }
             },
 
