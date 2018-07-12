@@ -15,11 +15,9 @@
                                 v-model="userData.origin"
                                 @input = "inputListen('origin')"
                                 >
-                                <div class="suggestions" style="border: 1px solid red">
-                                    <ul>
-                                        <li><b>Sto</b>rd  Airport, <b>Sto</b>rd, Norway</li>
-                                        <li>Airport</li>
-                                        <li>Airport</li>
+                                <div class="suggestions" style="border: 1px solid red" v-if="airports">
+                                     <ul>
+                                        <li v-for="airport in airports"><span v-if="airport.target.iata">{{airport.target.iata}} - </span> <span v-html="airport.display">{{airport.highlight}}</span></li>
                                     </ul>
                                 </div>
                     </div>
@@ -49,22 +47,7 @@
                 </div>
             </div>
             <hr>
-            <div class="row">
-                <div class="col-xs-12 col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-                    <app-switch v-model="dataSwitch"></app-switch>
-                </div>
-            </div>
-            <hr>
 
-
-            <div class="row">
-                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-                    <button
-                            class="btn btn-primary"
-                            @click.prevent="getAirports">Submit!
-                    </button>
-                </div>
-            </div>
         </form>
         <hr>
         <!--Resulting data and request URL -->
@@ -82,7 +65,7 @@
                         <hr>
                         <p>Airports: </p>
                         <ul>
-                            <li v-for="airport in airports"><span>{{airport.target.code}}</span> - <span v-html="airport.highlight">{{airport.highlight}}</span></li>
+                            <li v-for="airport in airports"><span v-if="airport.target.iata">{{airport.target.iata}} - </span> <span v-html="airport.display">{{airport.highlight}}</span></li>
                         </ul>
             
                     </div>
@@ -107,11 +90,12 @@ import axios from 'axios'
             }
         },
             methods: {
-                submitted() {
-                    this.isSubmitted = true;
-                },
                 inputListen(location) {
+                    this.clearAirports();
                     this.userData[location].length >= 3 ? this.getAirports(location) : console.log("Filled in " + location + " " + this.userData[location].length);
+                },
+                clearAirports() {
+                    this.airports = [];
                 },
 
                 getAirports(input) {
@@ -121,6 +105,7 @@ import axios from 'axios'
                         method: "GET",                                            
                     }).then( //IATA - City - Country
                         (resp) => {
+                            this.clearAirports();
                             let response = resp.data.items;
                             console.log(response);
                             let airports = response[0].items;
@@ -133,7 +118,6 @@ import axios from 'axios'
                             // data.forEach()
 
                             airports.forEach((airport) => {
-                                
                                 this.airports.push(airport);
                             });
                         });
