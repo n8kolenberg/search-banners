@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container pt-3">
         <form>
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
@@ -14,15 +14,20 @@
                                 class="form-control"
                                 v-model="userData.origin"
                                 @input = "inputListen('origin')"
+                                @keydown.down="onArrowDown"
+                                @keydown.up="onArrowUp"
+                                @keydown.enter="onEnter"
                                 >
-                        <div class="suggestions" style="border: 1px solid red" v-if="originSearch">
-                                <ul>
-                                <li v-for="airport in airports" @click="chooseAirport(airport, 'origin')">
-                                    <span v-if="airport.target.iata">{{airport.target.iata}} - </span> <span v-html="airport.display">{{airport.highlight}}</span>
+                        <div class="autocomplete" v-if="originSearchResults">
+                            <ul v-show="originSearchResults" class="autocomplete-results">
+                                <li v-for="(airport, i) in airports" @click="chooseAirport(airport, 'origin')" class="autocomplete-result" :class="{'is-active' : i === arrowCounter }">
+                                    <span v-show="airport.target.iata">{{airport.target.iata}} - </span> <span v-html="airport.display">{{airport.highlight}}</span>
                                 </li>
                             </ul>
                         </div>
                     </div>
+
+
                     <!-- Destination Input -->
                     <div class="form-group">
                         <label for="destination">To</label>
@@ -33,8 +38,8 @@
                                 v-model="userData.destination"
                                 @input="inputListen('destination')"
                                 >
-                        <div class="suggestions" style="border: 1px solid red" v-if="destSearch">
-                                <ul>
+                        <div class="suggestions" style="border: 1px solid red" v-if="destSearchResults">
+                            <ul v-show="destSearchResults">
                                 <li v-for="airport in airports" @click="chooseAirport(airport, 'destination')">
                                     <span v-if="airport.target.iata">{{airport.target.iata}} - </span> <span v-html="airport.display">{{airport.highlight}}</span>
                                 </li>
@@ -44,17 +49,13 @@
                 </div>
             </div>
 
+
+
             <!-- Calendar -->
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 from-group">
                     <label for="priority">Calendar</label>
-                    <select
-                            id="priority"
-                            class="form-control"
-                            v-model="selectedPriority">
-                            <option disabled value="">Please select an option</option>
-                        <option v-for="priority in priorities">{{ priority }}</option>
-                    </select>
+                    
                 </div>
             </div>
             <hr>
@@ -95,7 +96,10 @@
 </template>
 
 <script>
-import axios from 'axios' 
+import axios from 'axios'
+
+// import Calendar from "vue2-slot-calendar"
+
     export default {
         data() {
             return {
@@ -104,14 +108,15 @@ import axios from 'axios'
                     destination: "",
                     input: ""
                 },
-                originSearch: false,
-                destSearch: false,
+                originSearchResults: false,
+                destSearchResults: false,
                 airports: [],
                 originAirport: "",
                 destAirport: "",
                 originIATA: "",
                 destIATA: "",
-                tempIATA: ""
+                tempIATA: "",
+                arrowCounter: -1
 
             }
         },
@@ -158,11 +163,11 @@ import axios from 'axios'
                         
                         //Resetting these values to show the correct drop down choices for the airports underneath the inputs
                         if(input == "origin") {
-                            this.originSearch = true;
-                            this.destSearch = false;
+                            this.originSearchResults = true;
+                            this.destSearchResults = false;
                         } else {
-                            this.originSearch = false;
-                            this.destSearch = true;
+                            this.originSearchResults = false;
+                            this.destSearchResults = true;
                         }
 
                     });
@@ -181,31 +186,78 @@ import axios from 'axios'
                         this.originIATA = this.tempIATA;
                         this.userData.origin = airport.display;
                         this.clearAirports();
-                        //Resetting the originSearch to not display the search results
-                        this.originSearch = false;
+                        //Resetting the originSearchResults to not display the search results
+                        this.originSearchResults = false;
                     } else {
                         this.destIATA = this.tempIATA;
                         this.userData.destination = airport.display;
                         this.clearAirports();
-                        //Resetting the destSearch to not display the search results
-                        this.destSearch = false;
+                        //Resetting the destSearchResults to not display the search results
+                        this.destSearchResults = false;
                     }
                 //If it doesn't have a IATA value, it usually has a code value
                 } else if (airport.target.code) {
                     //and depending on whether the user did an origin / dest search, we add the selected IATA to the respective data property
                     loc == "origin" ? this.originIATA = airport.target.code : this.destIATA = airport.target.code;
 
-                }
-                
-
-
+                } 
+        },//End chooseAirport
+        /**The following methods will take care of keyboard inputs once the search results are shown */
+        onArrowDown() {
+            if(this.arrowCounter < this.airports.length) {
+                this.arrowCounter += 1; 
             }
         },
-        
-
-    }
+        onArrowUp() {
+            if(this.arrowCounter > 0) {
+                this.arrowCounter -= 1;
+            }
+        },
+        onEnter() {
+            //When the user presses enter, we check if they filled in the origin or destination input first
+            if (this.userData.origin.length >= 0) {
+                //Then we select the result based on the key of the array that they are at
+                this.chooseAirport(this.airports[this.arrowCounter], 'origin');
+            } else {
+                // this.userData.destination = this.airports[this.arrowCounter];
+                this.chooseAirport(this.airports[this.arrowCounter], 'destination');
+            }
+            this.arrowCounter = -1;
+        }
+    } //End methods
+}
 </script>
 
 <style>
 
+  .autocomplete {
+    position: relative;
+    width: 130px;
+  }
+
+  .autocomplete-results {
+    padding: 0;
+    margin: 0;
+    border: 1px solid #eeeeee;
+    height: 120px;
+    overflow: auto;
+  }
+
+  .autocomplete-result {
+    list-style: none;
+    text-align: left;
+    padding: 4px 2px;
+    cursor: pointer;
+  }
+
+  .autocomplete-result:hover {
+    background-color: #4AAE9B;
+    color: white;
+  }
+
+.autocomplete-result.is-active,
+  .autocomplete-result:hover {
+    background-color: #4AAE9B;
+    color: white;
+  }
 </style>

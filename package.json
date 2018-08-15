@@ -10,6 +10,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^3.3.7",
+    "bootstrap-vue": "^2.0.0-rc.11",
+    "style-loader": "^0.21.0",
     "vue": "^2.0.1",
     "vue2-slot-calendar": "^2.1.4"
   },
