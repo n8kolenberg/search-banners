@@ -14,13 +14,13 @@
                                 class="form-control"
                                 v-model="userData.origin"
                                 @input = "getAirports('origin')"
-                                @blur = "originSearchResults = false"
                                 @keydown.down="onArrowDown"
                                 @keydown.up="onArrowUp"
-                                @keydown.enter="onEnter"
+                                @keydown.enter="onEnter('origin')"
+                                @focus="destinationSearchResults = false"
                                 >
                         <div class="autocomplete" v-if="originSearchResults">
-                            <ul v-show="originSearchResults" class="autocomplete-results">
+                            <ul v-show="originSearchResults" class="autocomplete-results" style="overflow: hidden;">
                                 <li v-for="(airport, i) in airports" @click="chooseAirport(airport, 'origin')" class="autocomplete-result" :class="{'is-active' : i === arrowCounter }">
                                     <span v-show="airport.target.iata">{{airport.target.iata}} - </span> <span v-html="airport.display">{{airport.highlight}}</span>
                                 </li>
@@ -30,26 +30,33 @@
 
 
                     <!-- Destination Input -->
-                    <div class="form-group">
+                   <div class="form-group">
                         <label for="destination">To</label>
                         <input
                                 type="text"
                                 id="destination"
                                 class="form-control"
                                 v-model="userData.destination"
-                                @input="inputListen('destination')"
-                                
+                                @input = "getAirports('destination')"
+                                @keydown.down="onArrowDown"
+                                @keydown.up="onArrowUp"
+                                @keydown.enter="onEnter('dest')"
+                                @focus="originSearchResults = false"
                                 >
-                        <div class="suggestions" style="border: 1px solid red" v-if="destSearchResults">
-                            <ul v-show="destSearchResults">
-                                <li v-for="airport in airports" @click="chooseAirport(airport, 'destination')">
-                                    <span v-if="airport.target.iata">{{airport.target.iata}} - </span> <span v-html="airport.display">{{airport.highlight}}</span>
+                        <div class="autocomplete" v-if="destSearchResults">
+                            <ul v-show="destSearchResults" class="autocomplete-results" style="overflow: hidden;">
+                                <li v-for="(airport, i) in airports" @click="chooseAirport(airport, 'destination')" class="autocomplete-result" :class="{'is-active' : i === arrowCounter }">
+                                    <span v-show="airport.target.iata">{{airport.target.iata}} - </span> <span v-html="airport.display">{{airport.highlight}}</span>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
+
+
+
+
 
 
 
@@ -200,6 +207,21 @@ import axios from 'axios'
                 } else if (airport.target.code) {
                     //and depending on whether the user did an origin / dest search, we add the selected IATA to the respective data property
                     loc == "origin" ? this.originIATA = airport.target.code : this.destIATA = airport.target.code;
+                    //and depending on whether the user did an origin / dest search, we add the selected IATA to the respective data property 
+                    //and set the input to have the value of the chosen airport - then we clear the list of airports
+                    if(loc == "origin") {
+                        this.originIATA = airport.target.code;
+                        this.userData.origin = airport.display;
+                        this.clearAirports();
+                        //Resetting the originSearchResults to not display the search results
+                        this.originSearchResults = false;
+                    } else {
+                        this.destIATA = airport.target.code;
+                        this.userData.destination = airport.display;
+                        this.clearAirports();
+                        //Resetting the destSearchResults to not display the search results
+                        this.destSearchResults = false;
+                    }
 
                 } 
         },//End chooseAirport
@@ -217,9 +239,9 @@ import axios from 'axios'
             }
             
         },
-        onEnter() {
+        onEnter(originOrDest) {
             //When the user presses enter, we check if they filled in the origin or destination input first
-            if (this.userData.origin.length >= 0) {
+            if (originOrDest === "origin") {
                 //Then we select the result based on the key of the array that they are at
                 this.chooseAirport(this.airports[this.arrowCounter], 'origin');
             } else {
@@ -234,16 +256,17 @@ import axios from 'axios'
 
 <style>
 
+
   .autocomplete {
     position: relative;
-    width: 130px;
+    width: 300px;
   }
 
   .autocomplete-results {
     padding: 0;
     margin: 0;
     border: 1px solid #eeeeee;
-    height: 120px;
+    height: 100%;
     overflow: auto;
   }
 
@@ -255,13 +278,13 @@ import axios from 'axios'
   }
 
   .autocomplete-result:hover {
-    background-color: #4AAE9B;
+    background-color: #e64129;
     color: white;
   }
 
 .autocomplete-result.is-active,
   .autocomplete-result:hover {
-    background-color: #4AAE9B;
+    background-color: #e64129;
     color: white;
   }
 </style>
