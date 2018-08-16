@@ -13,7 +13,8 @@
                                 id="origin"
                                 class="form-control"
                                 v-model="userData.origin"
-                                @input = "inputListen('origin')"
+                                @input = "getAirports('origin')"
+                                @blur = "originSearchResults = false"
                                 @keydown.down="onArrowDown"
                                 @keydown.up="onArrowUp"
                                 @keydown.enter="onEnter"
@@ -37,6 +38,7 @@
                                 class="form-control"
                                 v-model="userData.destination"
                                 @input="inputListen('destination')"
+                                
                                 >
                         <div class="suggestions" style="border: 1px solid red" v-if="destSearchResults">
                             <ul v-show="destSearchResults">
@@ -130,47 +132,46 @@ import axios from 'axios'
         },
 
         methods: {
-            //Listens to user input and calls the getAirports method to call Ajax request once the user types in 3 characters or more
-            inputListen(location) {
-                this.userData[location].length >= 3 ? this.getAirports(location) : console.log("Filled in " + location + " " + this.userData[location].length);
-            },
             //Clears the list of airports
             clearAirports() {
                 this.airports = [];
             },
 
             //Does the Ajax request to get the airports based on user input
-            getAirports(input) {
-                input == "origin" ? this.userData.input = this.userData.origin : this.userData.input = this.userData.destination
-                axios({
-                    url: "https://www.us.despegar.com/suggestions?grouped=true&locale=en_US&profile=sbox-flights&hint="+this.userData.input,
-                    method: "GET",                                            
-                }).then( //IATA - City - Country
-                    (resp) => {
-                        this.clearAirports()
-                        let response = resp.data.items;
-                        // console.log(response);
-                        let airports = response[0].items;
-                        let cities = response[1].items
-                        console.log("Airports: ");
-                        console.log(airports);
-                        console.log("==================");
-                        // console.log("Cities: ")
-                        // console.log(cities);
-                        airports.forEach((airport) => {
-                            this.airports.push(airport);
-                        });
-                        
-                        //Resetting these values to show the correct drop down choices for the airports underneath the inputs
-                        if(input == "origin") {
-                            this.originSearchResults = true;
-                            this.destSearchResults = false;
-                        } else {
-                            this.originSearchResults = false;
-                            this.destSearchResults = true;
-                        }
+            getAirports(originOrDest) {
+                if(this.userData[originOrDest].length >= 3) {
+                    //Depending on whether the user used origin or dest input, we fill in the userData with that data for the axios call
+                    originOrDest == "origin" ? this.userData.input = this.userData.origin : this.userData.input = this.userData.destination
+                    axios({
+                        url: "https://www.us.despegar.com/suggestions?grouped=true&locale=en_US&profile=sbox-flights&hint="+this.userData.input,
+                        method: "GET",                                            
+                    }).then( //IATA - City - Country
+                        (resp) => {
+                            this.clearAirports()
+                            let response = resp.data.items;
+                            // console.log(response);
+                            let airports = response[0].items;
+                            let cities = response[1].items
+                            console.log("Airports: ");
+                            console.log(airports);
+                            console.log("======================");
 
-                    });
+                            //Adding the airports to the airports array
+                            airports.forEach((airport) => {
+                                this.airports.push(airport);
+                            });
+                            
+                            //Resetting these values to show the correct drop down choices for the airports underneath the inputs
+                            if(originOrDest == "origin") {
+                                this.originSearchResults = true;
+                                this.destSearchResults = false;
+                            } else {
+                                this.originSearchResults = false;
+                                this.destSearchResults = true;
+                            }
+                        });
+                }
+                
             },
 
             chooseAirport(airport, loc) {
@@ -204,14 +205,17 @@ import axios from 'axios'
         },//End chooseAirport
         /**The following methods will take care of keyboard inputs once the search results are shown */
         onArrowDown() {
-            if(this.arrowCounter < this.airports.length) {
-                this.arrowCounter += 1; 
-            }
+            this.arrowCounter >= this.airports.length - 1 ? this.arrowCounter = 0 : this.arrowCounter += 1; 
+
         },
         onArrowUp() {
-            if(this.arrowCounter > 0) {
-                this.arrowCounter -= 1;
+            if(this.arrowCounter >= 0) {
+                this.arrowCounter--;
+                if(this.arrowCounter < 0) {
+                    this.arrowCounter = this.airports.length - 1;
+                }
             }
+            
         },
         onEnter() {
             //When the user presses enter, we check if they filled in the origin or destination input first
