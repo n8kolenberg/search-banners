@@ -56,18 +56,15 @@
 
 
 
-
-
-
-
-            <!-- Calendar -->
+            <!-- Calendar UI Elements-->
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 from-group">
+                    <h3>Calendar through UI-Elements</h3>
                     <label for="priority">Calendar</label>
                      <div class="block">
                         <span class="demonstration">Default</span>
                         <el-date-picker
-                        v-model="value6"
+                        v-model="selectedDate"
                         type="daterange"
                         start-placeholder="Start date"
                         end-placeholder="End date">
@@ -77,6 +74,14 @@
                 </div>
             </div>
             <hr>
+            <br>
+
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 from-group">
+                    <button class="btn btn-info btn-lg form-group" @click.prevent="searchTajawal">Search</button>
+                </div>
+            </div>
 
         </form>
         <hr>
@@ -106,6 +111,11 @@
                         <h4> Chosen airports </h4>
                         <p>Origin: {{originIATA}}</p>
                         <p>Destination: {{destIATA}}</p>
+
+                        <hr>
+                        <h4> Chosen dates </h4>
+                        <p>From: {{selectedDate[0]}}</p>
+                        <p>To: {{selectedDate[1]}}</p>
                     </div>
                 </div>
             </div>
@@ -136,38 +146,14 @@ import axios from 'axios'
                 destIATA: "",
                 tempIATA: "",
                 arrowCounter: -1,
-
                 //DatePicker data
-                pickerOptions2: {
-                    shortcuts: [{
-                        text: 'Last week',
-                        onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                        picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: 'Last month',
-                        onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                        picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: 'Last 3 months',
-                        onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                        picker.$emit('pick', [start, end]);
-                        }
-                    }]
-                    },
-                    value6: '',
-                    value7: ''
-                };
+                selectedDate: '',
+
+
+
+
+                };//End return
+
             },// End data()
         computed: {
             //This will filter out the airport based on what the user types in
@@ -231,13 +217,13 @@ import axios from 'axios'
                     //and depending on whether the user did an origin / dest search, we add the selected IATA to the respective data property 
                     //and set the input to have the value of the chosen airport - then we clear the list of airports
                     if(loc == "origin") {
-                        this.originIATA = this.tempIATA;
+                        this.originIATA = this.tempIATA.toLowerCase();
                         this.userData.origin = airport.display;
                         this.clearAirports();
                         //Resetting the originSearchResults to not display the search results
                         this.originSearchResults = false;
                     } else {
-                        this.destIATA = this.tempIATA;
+                        this.destIATA = this.tempIATA.toLowerCase();
                         this.userData.destination = airport.display;
                         this.clearAirports();
                         //Resetting the destSearchResults to not display the search results
@@ -289,6 +275,18 @@ import axios from 'axios'
                 this.chooseAirport(this.airports[this.arrowCounter], 'destination');
             }
             this.arrowCounter = -1;
+        },
+
+        searchTajawal() {
+            /**Creating the final search url that we'll redirect users to */
+            //The url to search on tajawal needs a 0 in front of the month and getMonth starts counting at 0 so have to add 1 after getMonth()
+            let from = this.selectedDate[0].getFullYear() + '-0' + (this.selectedDate[0].getMonth()+1) + '-' + this.selectedDate[0].getDate();
+            let to = this.selectedDate[1].getFullYear() + '-0' + (this.selectedDate[1].getMonth()+1) + '-' + this.selectedDate[1].getDate();
+            let searchUrl = `https://www.tajawal.ae/en/flights/${this.originIATA}-${this.destIATA}/${from}/${to}/Economy/1Adult`;
+            console.log('Search URL: ');
+            console.log(searchUrl);
+            window.open(searchUrl, '_blank');
+
         }
     } //End methods
 }
