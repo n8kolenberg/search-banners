@@ -60,14 +60,14 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 from-group">
                     <h3>Calendar through UI-Elements</h3>
-                    <label for="priority">Calendar</label>
                      <div class="block">
-                        <span class="demonstration">Default</span>
                         <el-date-picker
                         v-model="selectedDate"
                         type="daterange"
                         start-placeholder="Start date"
-                        end-placeholder="End date">
+                        end-placeholder="End date"
+                        size="mini"
+                        align="center">
                         </el-date-picker>
                     </div>
                     
@@ -79,7 +79,7 @@
 
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 from-group">
-                    <button class="btn btn-info btn-lg form-group" @click.prevent="searchTajawal">Search</button>
+                    <button class="btn btn-info btn-lg form-group" @click.prevent="searchTajawal" :disabled="allFieldsFilled">Search</button>
                 </div>
             </div>
 
@@ -161,6 +161,14 @@ import axios from 'axios'
                 return this.airports.filter((airport) => {
                     return airport.highlight.toLowerCase().match(this.userData.input.toLowerCase());
                 });
+            },
+            allFieldsFilled() {
+                //Unless all required fields are filled in, user can't click on search button
+                if(this.originIATA && this.destIATA && this.selectedDate) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
         },
 
