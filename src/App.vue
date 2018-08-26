@@ -333,4 +333,19 @@ import axios from 'axios'
     background-color: #e64129;
     color: white;
   }
+  .el-picker-panel {
+      color: #626060;
+  }
+
+  .el-date-table td.end-date span,
+  .el-date-table td.start-date span {
+      background-color: #3665ac;
+  }
+
+  /* .el-picker-panel td.available:hover {
+      color: #3665ac;
+      font-style: bold;
+      
+  } */
+
 </style>
