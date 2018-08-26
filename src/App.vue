@@ -64,6 +64,15 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 from-group">
                     <label for="priority">Calendar</label>
+                     <div class="block">
+                        <span class="demonstration">Default</span>
+                        <el-date-picker
+                        v-model="value6"
+                        type="daterange"
+                        start-placeholder="Start date"
+                        end-placeholder="End date">
+                        </el-date-picker>
+                    </div>
                     
                 </div>
             </div>
@@ -107,6 +116,7 @@
 <script>
 import axios from 'axios'
 
+
 // import Calendar from "vue2-slot-calendar"
 
     export default {
@@ -125,10 +135,40 @@ import axios from 'axios'
                 originIATA: "",
                 destIATA: "",
                 tempIATA: "",
-                arrowCounter: -1
+                arrowCounter: -1,
 
-            }
-        },
+                //DatePicker data
+                pickerOptions2: {
+                    shortcuts: [{
+                        text: 'Last week',
+                        onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                        picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: 'Last month',
+                        onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                        picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: 'Last 3 months',
+                        onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                        picker.$emit('pick', [start, end]);
+                        }
+                    }]
+                    },
+                    value6: '',
+                    value7: ''
+                };
+            },// End data()
         computed: {
             //This will filter out the airport based on what the user types in
             filterAirport() {
