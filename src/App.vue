@@ -114,8 +114,8 @@
 
                         <hr>
                         <h4> Chosen dates </h4>
-                        <p>From: {{selectedDate[0]}}</p>
-                        <p>To: {{selectedDate[1]}}</p>
+                        <p>From: {{selectedDate ? selectedDate[0] : "No outgoing date selected"}}</p>
+                        <p>To: {{selectedDate ? selectedDate[1] : "No return date selected"}}</p>
                     </div>
                 </div>
             </div>
@@ -146,11 +146,8 @@ import axios from 'axios'
                 destIATA: "",
                 tempIATA: "",
                 arrowCounter: -1,
-                //DatePicker data
+                //DatePicker data in form of array once user selects dates
                 selectedDate: '',
-
-
-
 
                 };//End return
 
@@ -163,7 +160,7 @@ import axios from 'axios'
                 });
             },
             allFieldsFilled() {
-                //Unless all required fields are filled in, user can't click on search button
+                //Unless all required fields are filled in, user can't click on search button as this is dynamically linked to search button
                 if(this.originIATA && this.destIATA && this.selectedDate) {
                     return false;
                 } else {
@@ -256,8 +253,7 @@ import axios from 'axios'
                         //Resetting the destSearchResults to not display the search results
                         this.destSearchResults = false;
                     }
-
-                } 
+                } //End if else clause
         },//End chooseAirport
         /**The following methods will take care of keyboard inputs once the search results are shown */
         onArrowDown() {
@@ -286,6 +282,7 @@ import axios from 'axios'
         },
 
         searchTajawal() {
+            if(this.selectedDate) {
             /**Creating the final search url that we'll redirect users to */
             //The url to search on tajawal needs a 0 in front of the month and getMonth starts counting at 0 so have to add 1 after getMonth()
             let from = this.selectedDate[0].getFullYear() + '-0' + (this.selectedDate[0].getMonth()+1) + '-' + this.selectedDate[0].getDate();
@@ -294,6 +291,8 @@ import axios from 'axios'
             console.log('Search URL: ');
             console.log(searchUrl);
             window.open(searchUrl, '_blank');
+            }
+            
 
         }
     } //End methods
@@ -342,10 +341,5 @@ import axios from 'axios'
       background-color: #3665ac;
   }
 
-  /* .el-picker-panel td.available:hover {
-      color: #3665ac;
-      font-style: bold;
-      
-  } */
 
 </style>
