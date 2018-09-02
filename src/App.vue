@@ -1,13 +1,12 @@
 <template>
-    <div class="container pt-3">
-        <form>
+    <div class="container pt-3" id="search-container">
+        <form id="search-form">
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-                    <h2>Tajawal Search Banners - Framework</h2>
-                    <hr>
+ 
                     <!-- Origin Input -->
-                    <div class="form-group">
-                        <label for="origin">From</label>
+                    <div class="form-group" id="origin-input" >
+                        <label for="origin">Origin</label>
                         <input
                                 type="text"
                                 id="origin"
@@ -30,8 +29,8 @@
 
 
                     <!-- Destination Input -->
-                   <div class="form-group">
-                        <label for="destination">To</label>
+                   <div class="form-group" id="destination-input" >
+                        <label for="destination">Destination</label>
                         <input
                                 type="text"
                                 id="destination"
@@ -59,22 +58,21 @@
             <!-- Calendar UI Elements-->
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 from-group">
-                    <h3>Calendar through UI-Elements</h3>
                      <div class="block">
                         <el-date-picker
                         v-model="selectedDate"
                         type="daterange"
-                        start-placeholder="Start date"
-                        end-placeholder="End date"
+                        start-placeholder="From"
+                        end-placeholder="Until"
                         size="mini"
-                        align="center">
+                        align="center"
+                        id="el-date-picker">
                         </el-date-picker>
                     </div>
                     
                 </div>
             </div>
-            <hr>
-            <br>
+   
 
 
             <div class="row">
@@ -84,11 +82,11 @@
             </div>
 
         </form>
-        <hr>
+
 
 
         <!--Resulting data and request URL -->
-        <div class="row">
+        <!--<div class="row">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -119,7 +117,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --> <!--End Resulting Data div -->
     </div>
 </template>
 
@@ -301,6 +299,30 @@ import axios from 'axios'
 
 <style>
 
+    #search-container {
+        background-image: url('https://demo.criteo.com/support/nkolenberg/searchbanners/Search-Banners-300x600.jpg');
+        background-repeat: no-repeat;
+        height: 600px;
+        width: 300px;
+    }
+
+    #search-form {
+        position: absolute;
+        top: 300px;
+        
+    }
+
+    #origin-input {
+
+    }
+
+    #destination-input {
+
+    }
+
+.el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner {
+    width: 250px;
+}
 
   .autocomplete {
     position: relative;
