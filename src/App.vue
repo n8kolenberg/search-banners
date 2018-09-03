@@ -2,10 +2,9 @@
     <div class="container pt-3" id="search-container">
         <form id="search-form">
             <div class="row">
-                <div class="col-xs-12 col-sm-8 col-md-6">
- 
+                <div class="col-xs-3">
                     <!-- Origin Input -->
-                    <div class="form-group" id="origin-input" >
+                    <div class="form-group" id="origin-input">
                         <label for="origin">Origin</label>
                         <input
                                 type="text"
@@ -26,6 +25,7 @@
                             </ul>
                         </div>
                     </div>
+                    
 
 
                     <!-- Destination Input -->
@@ -50,10 +50,8 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> <!-- End div with class col-3 -->
             </div>
-
-
 
             <!-- Calendar UI Elements-->
             <div class="row">
@@ -72,8 +70,6 @@
                     
                 </div>
             </div>
-   
-
 
             <div class="row">
                 <div class="col-xs-12 from-group text-center">
@@ -83,41 +79,6 @@
 
         </form>
 
-
-
-        <!--Resulting data and request URL -->
-        <!--<div class="row">
-            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4>Your Data</h4>
-                    </div>
-                    <div class="panel-body">
-                        <p>Origin: {{userData.origin}}</p>
-                        <p>Destination: {{userData.destination}}</p>
-                        <p>User Input: {{userData.input}}</p>
-
-                        <hr>
-                        <h4>Airports: </h4>
-                        <ul>
-                            <li v-for="airport in filterAirport" >
-                                <span v-if="airport.target.iata">{{airport.target.iata}} - </span> <span v-html="airport.display">{{airport.highlight}}</span>
-                            </li>
-                        </ul>
-
-                        <hr>
-                        <h4> Chosen airports </h4>
-                        <p>Origin: {{originIATA}}</p>
-                        <p>Destination: {{destIATA}}</p>
-
-                        <hr>
-                        <h4> Chosen dates </h4>
-                        <p>From: {{selectedDate ? selectedDate[0] : "No outgoing date selected"}}</p>
-                        <p>To: {{selectedDate ? selectedDate[1] : "No return date selected"}}</p>
-                    </div>
-                </div>
-            </div>
-        </div> --> <!--End Resulting Data div -->
     </div>
 </template>
 
@@ -300,7 +261,7 @@ import axios from 'axios'
 <style>
 
     label {
-        color: whitesmoke;
+        color: #feffff;
         font-size: 1.15em;
     }
 
@@ -338,7 +299,11 @@ import axios from 'axios'
 }
 
   .autocomplete {
-    position: relative;
+    position: absolute;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
     width: 300px;
   }
 
@@ -355,6 +320,7 @@ import axios from 'axios'
     text-align: left;
     padding: 4px 2px;
     cursor: pointer;
+    background-color: whitesmoke;
   }
 
   .autocomplete-result:hover {
