@@ -2,7 +2,7 @@
     <div class="container pt-3" id="search-container">
         <form id="search-form">
             <div class="row">
-                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+                <div class="col-xs-12 col-sm-8 col-md-6">
  
                     <!-- Origin Input -->
                     <div class="form-group" id="origin-input" >
@@ -57,7 +57,7 @@
 
             <!-- Calendar UI Elements-->
             <div class="row">
-                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 from-group">
+                <div class="col-xs-12 col-sm-8 col-md-6 from-group text-center pagination-centered">
                      <div class="block">
                         <el-date-picker
                         v-model="selectedDate"
@@ -76,8 +76,8 @@
 
 
             <div class="row">
-                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 from-group">
-                    <button class="btn btn-info btn-lg form-group" @click.prevent="searchTajawal" :disabled="allFieldsFilled">Search</button>
+                <div class="col-xs-12 from-group text-center">
+                    <button id="searchBtn" class="btn btn-info btn-lg form-group" @click.prevent="searchTajawal" :disabled="allFieldsFilled">Search</button>
                 </div>
             </div>
 
@@ -299,6 +299,11 @@ import axios from 'axios'
 
 <style>
 
+    label {
+        color: whitesmoke;
+        font-size: 1.15em;
+    }
+
     #search-container {
         background-image: url('https://demo.criteo.com/support/nkolenberg/searchbanners/Search-Banners-300x600.jpg');
         background-repeat: no-repeat;
@@ -308,20 +313,28 @@ import axios from 'axios'
 
     #search-form {
         position: absolute;
-        top: 300px;
-        
+        top: 150px;
+
     }
 
     #origin-input {
-
+        width: 270px;
     }
 
     #destination-input {
+        width: 270px;
+        padding-bottom: 20px;
+    }
 
+    #searchBtn {
+        margin-top: 20px;
+        background-color: #e64129;
+        width: 125px;
+        height: 35px;
     }
 
 .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner {
-    width: 250px;
+    width: 270px;
 }
 
   .autocomplete {
