@@ -1,5 +1,5 @@
 <template>
-    <div class="container pt-3" id="search-container">
+    <div class="container" id="search-container">   
         <form id="search-form">
             <div class="row">
                 <div class="col-xs-3">
@@ -55,7 +55,7 @@
 
             <!-- Calendar UI Elements-->
             <div class="row">
-                <div class="col-xs-12 col-sm-8 col-md-6 from-group text-center pagination-centered">
+                <div class="col-xs-12 from-group text-center pagination-centered" id="date-picker">
                      <div class="block">
                         <el-date-picker
                         v-model="selectedDate"
@@ -270,6 +270,7 @@ import axios from 'axios'
         background-repeat: no-repeat;
         height: 600px;
         width: 300px;
+        margin: 0px;
     }
 
     #search-form {
@@ -280,11 +281,12 @@ import axios from 'axios'
 
     #origin-input {
         width: 270px;
+        position: relative;
     }
 
     #destination-input {
         width: 270px;
-        padding-bottom: 20px;
+        position: relative;
     }
 
     #searchBtn {
@@ -292,6 +294,14 @@ import axios from 'axios'
         background-color: #e64129;
         width: 125px;
         height: 35px;
+    }
+
+    #date-picker {
+        margin-top: 20px;
+    }
+
+    #searchBtn {
+        border-radius: 5px;
     }
 
 .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner {
@@ -302,7 +312,7 @@ import axios from 'axios'
     position: absolute;
     z-index: 99;
     top: 100%;
-    left: 0;
+    left: -15px;
     right: 0;
     width: 300px;
   }
