@@ -1,0 +1,91 @@
+label {
+    color: #feffff;
+    font-weight: 400;
+}
+
+#search-container {
+    background-image: url('https://demo.criteo.com/support/nkolenberg/searchbanners/Search-Banners-300x600.jpg');
+    background-repeat: no-repeat;
+    height: 600px;
+    width: 300px;
+    margin: 0px;
+}
+
+#search-form {
+    position: absolute;
+    top: 150px;
+
+}
+
+#origin-input {
+    width: 270px;
+    position: relative;
+    font-size: 12px;
+}
+
+#destination-input {
+    width: 270px;
+    position: relative;
+    font-size: 12px;
+}
+
+#searchBtn {
+    margin-top: 20px;
+    background-color: #e64129;
+    width: 125px;
+    border-radius: 5px;
+    
+}
+
+#date-picker {
+    margin-top: 20px;
+}
+
+
+.el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner {
+width: 270px;
+}
+
+.autocomplete {
+position: absolute;
+z-index: 99;
+top: 100%;
+left: -15px;
+right: 0;
+width: 300px;
+}
+
+.autocomplete-results {
+padding: 0;
+margin: 0;
+border: 1px solid #eeeeee;
+height: 100%;
+overflow: auto;
+}
+
+.autocomplete-result {
+list-style: none;
+text-align: left;
+padding: 4px 2px;
+cursor: pointer;
+background-color: whitesmoke;
+}
+
+.autocomplete-result:hover {
+background-color: #e64129;
+color: white;
+}
+
+.autocomplete-result.is-active,
+.autocomplete-result:hover {
+background-color: #e64129;
+color: white;
+}
+.el-picker-panel {
+  color: #626060;
+}
+
+.el-date-table td.end-date span,
+.el-date-table td.start-date span {
+  background-color: #3665ac;
+}

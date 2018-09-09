@@ -1,26 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Vue Forms</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 
-<!-- Add this after vue.js -->
-<script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
-<script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<head>
+  <meta charset="utf-8">
+  <title>Tajawal Search Banners 728x90</title>
 
 
+  <!-- Bootstrap-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+
+
+  <!--Vue JS-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"></script>
+  <!--Axios for Ajax Requests-->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+  <!-- Element UI for the DatePicker-->
+  <!-- import Element UI CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+  <!-- import Element UI JavaScript -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+  <script src="https://unpkg.com/vue"></script>
+  <script src="https://unpkg.com/element-ui"></script>
+  <script src="https://unpkg.com/element-ui/lib/umd/locale/en.js"></script>
+  <script>
+    //To set Element UI to English language
+    ELEMENT.locale(ELEMENT.lang.en)
+  </script>
+
+  <!--Main CSS Styles-->
+  <link rel="stylesheet" href="main.css">
+
+</head>
+
+<body>
 
 
 
-  </head>
-  <body>
-    <div id="app">
+  <div id="app">
+    <div class="container" id="search-container">
+      <form id="search-form">
+        <div class="row">
+          <div class="col-xs-3">
+            <!-- Origin Input -->
+            <div class="form-group" id="origin-input">
+              <label for="origin">Origin</label>
+              <input type="text" id="origin" class="form-control" v-model="userData.origin" @input="getAirports('origin')"
+                @keydown.down="onArrowDown" @keydown.up="onArrowUp" @keydown.enter="onEnter('origin')">
+              <div class="autocomplete" v-if="originSearchResults">
+                <ul v-show="originSearchResults" class="autocomplete-results" style="overflow: hidden;">
+                  <li v-for="(airport, i) in airports" @click="chooseAirport(airport, 'origin')" class="autocomplete-result"
+                    :class="{'is-active' : i === arrowCounter }">
+                    <span v-show="airport.target.iata">{{airport.target.iata}} - </span> <span v-html="airport.display">{{airport.highlight}}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Destination Input -->
+            <div class="form-group" id="destination-input">
+              <label for="destination">Destination</label>
+              <input type="text" id="destination" class="form-control" v-model="userData.destination" @input="getAirports('destination')"
+                @keydown.down="onArrowDown" @keydown.up="onArrowUp" @keydown.enter="onEnter('dest')" @focus="originSearchResults = false">
+              <div class="autocomplete" v-if="destSearchResults">
+                <ul v-show="destSearchResults" class="autocomplete-results" style="overflow: hidden;">
+                  <li v-for="(airport, i) in airports" @click="chooseAirport(airport, 'destination')" class="autocomplete-result"
+                    :class="{'is-active' : i === arrowCounter }">
+                    <span v-show="airport.target.iata">{{airport.target.iata}} - </span> <span v-html="airport.display">{{airport.highlight}}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div> <!-- End div with class col-3 -->
+        </div>
+
+        <!-- Calendar UI Elements-->
+        <div class="row">
+          <div class="col-xs-12 from-group text-center pagination-centered" id="date-picker">
+            <div class="block">
+              <el-date-picker v-model="selectedDate" type="daterange" start-placeholder="From" end-placeholder="Until"
+                lang='en' size="mini" align="center" id="el-date-picker">
+              </el-date-picker>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12 from-group text-center">
+            <button id="searchBtn" class="btn btn-info btn-lg form-group" @click.prevent="searchTajawal" :disabled="allFieldsFilled">Search</button>
+          </div>
+        </div>
+
+      </form>
+
     </div>
+  </div>
 
-    <script src="/dist/build.js"></script>
-  </body>
+  <script src="app.js"></script>
+</body>
+
 </html>
