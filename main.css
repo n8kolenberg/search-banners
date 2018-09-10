@@ -4,16 +4,16 @@ label {
 }
 
 #search-container {
-    background-image: url('https://demo.criteo.com/support/nkolenberg/searchbanners/Search-Banners-300x600.jpg');
+    background-image: url('https://demo.criteo.com/support/nkolenberg/searchbanners/Search-Banners-300x250.jpg');
     background-repeat: no-repeat;
-    height: 600px;
+    height: 250px;
     width: 300px;
     margin: 0px;
 }
 
 #search-form {
     position: absolute;
-    top: 150px;
+    top: 60px;
 
 }
 
@@ -21,26 +21,34 @@ label {
     width: 270px;
     position: relative;
     font-size: 12px;
+    
 }
 
 #destination-input {
     width: 270px;
     position: relative;
     font-size: 12px;
+    
 }
 
 #searchBtn {
-    margin-top: 20px;
+    margin-top: 10px;
     background-color: #e64129;
-    width: 125px;
+    width: 175px;
     border-radius: 5px;
     
 }
 
 #date-picker {
-    margin-top: 20px;
+    opacity: 0.92;
 }
 
+#destination {
+    opacity: 0.92;
+}
+#origin {
+    opacity: 0.92;
+}
 
 .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner {
 width: 270px;
