@@ -17,20 +17,7 @@
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 
-  <!-- Element UI for the DatePicker-->
-  <!-- import Element UI CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 
-  <!-- import Element UI JavaScript -->
-  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-
-  <script src="https://unpkg.com/vue"></script>
-  <script src="https://unpkg.com/element-ui"></script>
-  <script src="https://unpkg.com/element-ui/lib/umd/locale/en.js"></script>
-  <script>
-    //To set Element UI to English language
-    ELEMENT.locale(ELEMENT.lang.en)
-  </script>
 
   <!--Main CSS Styles-->
   <link rel="stylesheet" href="main.css">
@@ -73,18 +60,6 @@
               </div>
             </div>
           </div> <!-- End div with class col-3 -->
-        </div>
-
-        <!-- Calendar UI Elements-->
-        <div class="row">
-          <div class="col-xs-12 from-group text-center pagination-centered" id="date-picker">
-            <div class="block">
-              <el-date-picker v-model="selectedDate" type="daterange" start-placeholder="From" end-placeholder="Until"
-                lang='en' size="mini" align="center" id="el-date-picker">
-              </el-date-picker>
-            </div>
-
-          </div>
         </div>
 
         <div class="row">

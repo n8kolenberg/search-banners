@@ -13,7 +13,7 @@ label {
 
 #search-form {
     position: absolute;
-    top: 60px;
+    top: 80px;
 
 }
 
@@ -40,14 +40,14 @@ label {
 }
 
 #date-picker {
-    opacity: 0.92;
+    opacity: 0.87;
 }
 
 #destination {
-    opacity: 0.92;
+    opacity: 0.87;
 }
 #origin {
-    opacity: 0.92;
+    opacity: 0.87;
 }
 
 .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner {

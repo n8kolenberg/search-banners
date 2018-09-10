@@ -29,7 +29,7 @@ new Vue({
         },
         allFieldsFilled() {
             //Unless all required fields are filled in, user can't click on search button as this is dynamically linked to search button
-            if (this.originIATA && this.destIATA && this.selectedDate) {
+            if (this.originIATA && this.destIATA) {
                 return false;
             } else {
                 return true;
@@ -78,8 +78,9 @@ new Vue({
                     });
             }
 
-        },
+        }, //End getAirports
 
+        //This function is triggered when user chooses airport from the autocomplete dropdown form
         chooseAirport(airport, loc) {
             console.log("clicked the following airport:");
             airport.target.iata ? console.log(airport.target.iata) : console.log(airport.target.code);
@@ -150,18 +151,20 @@ new Vue({
         },
 
         searchTajawal() {
-            if (this.selectedDate) {
-                /**Creating the final search url that we'll redirect users to */
-                //The url to search on tajawal needs a 0 in front of the month and getMonth starts counting at 0 so have to add 1 after getMonth()
-                let from = this.selectedDate[0].getFullYear() + '-0' + (this.selectedDate[0].getMonth() + 1) + '-' + this.selectedDate[0].getDate();
-                let to = this.selectedDate[1].getFullYear() + '-0' + (this.selectedDate[1].getMonth() + 1) + '-' + this.selectedDate[1].getDate();
-                let searchUrl = `https://www.tajawal.ae/en/flights/${this.originIATA}-${this.destIATA}/${from}/${to}/Economy/1Adult`;
-                console.log('Search URL: ');
-                console.log(searchUrl);
-                window.open(searchUrl, '_blank');
-            }
-
-
+            const now = new Date();
+            //Counting 7 days on top of the current date in milliseconds
+            const later = new Date(now.getTime() + 604800000)
+            console.log(now.toLocaleDateString());
+            console.log(later.toLocaleDateString());
+            
+            /**Creating the final search url that we'll redirect users to */
+            //The url to search on tajawal needs a 0 in front of the month and getMonth starts counting at 0 so have to add 1 after getMonth()
+            let from = now.getFullYear() + '-0' + (now.getMonth() + 1) + '-' + now.getDate();
+            let to = later.getFullYear() + '-0' + (later.getMonth() + 1) + '-' + (later.getDate());
+            let searchUrl = `https://www.tajawal.ae/en/flights/${this.originIATA}-${this.destIATA}/${from}/${to}/Economy/1Adult`;
+            console.log('Search URL: ');
+            console.log(searchUrl);
+            window.open(searchUrl, '_blank');
         }
     } //End methods
 })
